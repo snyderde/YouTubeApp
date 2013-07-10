@@ -1,10 +1,48 @@
 <!doctype html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>YouTube Embed</title>
-</head>
+<!--
+Matthew Allbright: So one thing i'm trying to tackle is how to arrange the list of urls so that it stays as the url's
+that is imported from the API data.
 
-<body>
-</body>
+One idea is to create a series of divs and load the urls into the divs, then somehow figure out how to rearrange them.
+I think that aspect is going to be the biggest hurdle. The YouTube url import was pretty much done for us in that 
+in-class youtube example.
+
+
+-->
+<meta charset="UTF-8">
+<title>YouTubeApp</title>
+</head>
+<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+  <style>
+    body{
+          margin: 0;
+          padding: 10px;
+        }
+    content{
+      width: 600px;
+      height: 800px;
+      background-color: #666;
+      float: left;
+    }
+    youtube{
+      float: left;
+    }
+    
+  </style>
+  <script>
+    $(document).ready(function(e) {
+        console.log("start");
+        
+    });
+  </script>
+  <body>
+    <div id="content">
+      <!--List -->
+    </div>
+    <div id="youtube">
+      
+    </div>
+  </body>
 </html>
