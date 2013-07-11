@@ -31,12 +31,35 @@ in-class youtube example.
     }
     
   </style>
-  <script>
-    $(document).ready(function(e) {
-        console.log("start");
+ <script>
+  $(document).ready(function(e) {
         
+//get references to the two list divs
+var firstDiv = $("#divA");
+var secondDiv = $("#divB");
+
+//dummy data
+//makes 10 paragraph of two words randomly placed together
+var words = [ "batman", "cat", "plural", "banana", "tango", "foxtrot" ];
+var phrases = [];
+
+for( var i = 0; i < 10; i++) {
+
+var rnd1 = Math.floor( Math.random() * words.length );
+var rnd2 = Math.floor( Math.random() * words.length );
+phrases.push( words[rnd1] + " " + words[rnd2] );
+
+firstDiv.append( "<p data-index='" + i + "'>" + phrases[i] + " <span class='searchItems'> -> </span></p>" );
+
+}
+
+$(".searchItems").click(function() {
+var parentIndex = $(this).parent().data("index");
+var associatedData = phrases[ parentIndex ];
+secondDiv.append( "<li>" + associatedData + "</li>" );
+})
+
     });
-  </script>
   <body>
     <div id="content">
       <!--List -->
