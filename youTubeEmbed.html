@@ -6,7 +6,7 @@ Matthew Allbright: So one thing i'm trying to tackle is how to arrange the list 
 that is imported from the API data.
 
 One idea is to create a series of divs and load the urls into the divs, then somehow figure out how to rearrange them.
-I think that aspect is going to be the biggest hurdle. The YouTube url import was pretty much done for us in that 
+I think that aspect is going to be the biggest hurdle. The YouTube url import was pretty much done for us in that
 in-class youtube example.
 
 
@@ -14,24 +14,69 @@ in-class youtube example.
 <meta charset="UTF-8">
 <title>YouTubeApp</title>
 </head>
+<script src="googleapis.com/ajax/libs/swfobject/2.2/swtobject.js"></script>
 <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+<script type="text/javascript">
+  var params = { allowScriptAccess: "always"};
+	var atts = { id: "myytplayer"};
+	swfobject.embedSWF("http://www.youtube.com/apiplayer?enablejsapi=1", "tubePlayer", "425", "356", "8", null, null, params, atts);
+	
+	var player;
+	function onYouTubePlayerReady(id) {
+		console.log("runs");
+		player=$("#myytplayer").get(0);
+	}
+</script>
   <style>
     body{
           margin: 0;
           padding: 10px;
         }
-    content{
-      width: 600px;
+    #content{
+      width: 300px;
       height: 800px;
       background-color: #666;
       float: left;
     }
-    youtube{
-      float: left;
+    .youtube{
+	  width: 300px;
+	  height: 800px;
+	  background-color:#999;
+	  float: left;
     }
     
   </style>
- <script>
+  <script>
+  	$(document).ready(function(e){
+		console.log('init');
+		//button
+		
+		$("btnSearch").click(function(){
+				console.log('button works');
+				var url= "http://gdata.youtube.com/feeds/api/videos";
+				$.getJSON(url+$("#txtSearch").val(), function (data) {
+				//your custom search results here
+				
+				
+				});
+			});
+			
+			//ajax
+	<!--		$.getJSON("http://gdata.youtube.com/feeds/api/videos?max-results=20&alt=json&q=", function ( data ){
+				//console.log('data');
+				
+				//$("#content").append( data.feed.entry[0].title.$t );
+				//for( var i=0; i < data.feed.entry.length; i ++ ){
+				//	$("#content").append( "<p>" + data.feed.entry[i].title.$t + "</p>");
+				//}
+				//});
+				
+			//}); -->
+	});
+  
+  </script>
+  
+<!-- <script>
   $(document).ready(function(e) {
         
 //get references to the two list divs
@@ -59,13 +104,16 @@ var associatedData = phrases[ parentIndex ];
 secondDiv.append( "<li>" + associatedData + "</li>" );
 })
 
-    });
+    }); --> 
   <body>
+  	<div id="divA" class="col">
+    	<input id="txtSearch" />
+        <input id="btnSearch" type="button" value="Search!" />
+    </div>
     <div id="content">
       <!--List -->
     </div>
-    <div id="youtube">
-      
+    <div class="youtube">
     </div>
   </body>
 </html>
