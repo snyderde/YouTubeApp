@@ -53,28 +53,13 @@ in-class youtube example.
 		console.log('init');
 		var url= "http://gdata.youtube.com/feeds/api/videos?max-results=20&alt=json&q=";
 		var loadedData;
-		//var val = $(this).children('input:first').val();
 		//button
 		$("#btnSearch").click(function(){
 			console.log('button works');
-			$.getJSON(url+$("#txtSearch").value, function (data) {
-			console.log("#txtSearch".value);
-			});//end button
 		
 		});//end btnSearch
 			
 		//processing data into url
-		$.getJSON( url, function ( data ) {
-			loadedData= data;
-			$.each( data.feed.entry, function ( key, value) {
-				var nodeURL= value.id.$t.replay("http://gdata.youtube.com/feeds/api/videos", "");
-				$("#youtube").append("<p data-rul='" + nodeUrl + "' >" + value.title.$t + "</p>");
-				$("p").on("click", function( key, value){
-					player.loadVideobyId( $(this).data("url"), 0, "default");
-					console.log( $(this).data("url") );
-				});//end p
-			});//end each
-		});//end get
 });//end Ready
 			
 	</script>
