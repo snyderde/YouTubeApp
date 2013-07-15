@@ -51,15 +51,27 @@ in-class youtube example.
   <script>
   	$(document).ready(function(e){
 		console.log('init');
-		var url= "http://gdata.youtube.com/feeds/api/videos?max-results=20&alt=json&q=";
+		var val="";
 		var loadedData;
 		//button
 		$("#btnSearch").click(function(){
 			console.log('button works');
-		
+			var url= "http://gdata.youtube.com/feeds/api/videos?max-results=20&alt=json&q=";
+			$.getJSON( url + $("#txtSearch").val(), function (data) {
+				//your custom search results 
+				console.log(data);
+			});//get
 		});//end btnSearch
-			
+		$.getJSON( url, function (data) {
+		loadeData= data;
+		$.each( data.feed.entry, function ( key, value) {
+			var nodeUrl = value.id.$t.replace("http://gdata.youtube.com/feeds/api/videos/", "")
+			//$("txtSearch")
+	
+		});//end of each
+		});//end get data
 		//processing data into url
+		
 });//end Ready
 			
 	</script>
