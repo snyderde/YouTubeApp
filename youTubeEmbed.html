@@ -51,66 +51,34 @@ in-class youtube example.
   <script>
   	$(document).ready(function(e){
 		console.log('init');
+		var url= "http://gdata.youtube.com/feeds/api/videos?max-results=20&alt=json&q=";
+		var loadedData;
+		//var val = $(this).children('input:first').val();
 		//button
+		$("#btnSearch").click(function(){
+			console.log('button works');
+			$.getJSON(url+$("#txtSearch").value, function (data) {
+			console.log("#txtSearch".value);
+			});//end button
 		
-		$("btnSearch").click(function(){
-				console.log('button works');
-				var url= "http://gdata.youtube.com/feeds/api/videos";
-				$.getJSON(url+$("#txtSearch").val(), function (data) {
-				//your custom search results here
-				console.log("#txtSearch".val());
-				});
-				
-				//player
-	var url = "http://gdata.youtube.com/feeds/api/videos?max-results=20&json&q=cats";
-	
-	var  loadedData;
-	$.getJSON(url, function ( data ) {
-		loadedData = data;
-		$.each( data.feed.entry, function ( key, value) {
-			var nodeUrl= value.id.$t.replay("http://gdata.youtube.com/feeds/api/videos", "");
-			$("#youtube").append("<p data-rul='" + nodeUrl + "' >" + value.title.$t + "</p>");
-			$("p").on("click", function () {
-				player.loadVideobyId( $(this).data("url"), 0, "default");
-				console.log( $(this).data("url") );
-			});
-		});
-	});
-				
-});
-});
+		});//end btnSearch
+			
+		//processing data into url
+		$.getJSON( url, function ( data ) {
+			loadedData= data;
+			$.each( data.feed.entry, function ( key, value) {
+				var nodeURL= value.id.$t.replay("http://gdata.youtube.com/feeds/api/videos", "");
+				$("#youtube").append("<p data-rul='" + nodeUrl + "' >" + value.title.$t + "</p>");
+				$("p").on("click", function( key, value){
+					player.loadVideobyId( $(this).data("url"), 0, "default");
+					console.log( $(this).data("url") );
+				});//end p
+			});//end each
+		});//end get
+});//end Ready
 			
 	</script>
-  
-<!-- <script>
-  $(document).ready(function(e) {
-        
-//get references to the two list divs
-var firstDiv = $("#divA");
-var secondDiv = $("#divB");
-
-//dummy data
-//makes 10 paragraph of two words randomly placed together
-var words = [ "batman", "cat", "plural", "banana", "tango", "foxtrot" ];
-var phrases = [];
-
-for( var i = 0; i < 10; i++) {
-
-var rnd1 = Math.floor( Math.random() * words.length );
-var rnd2 = Math.floor( Math.random() * words.length );
-phrases.push( words[rnd1] + " " + words[rnd2] );
-
-firstDiv.append( "<p data-index='" + i + "'>" + phrases[i] + " <span class='searchItems'> -> </span></p>" );
-
-}
-
-$(".searchItems").click(function() {
-var parentIndex = $(this).parent().data("index");
-var associatedData = phrases[ parentIndex ];
-secondDiv.append( "<li>" + associatedData + "</li>" );
-})
-
-    }); --> 
+    
   <body>
   	<div id="divA" class="col">
     	<input id="txtSearch" />
