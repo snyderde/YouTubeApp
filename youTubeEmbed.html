@@ -1,11 +1,20 @@
+
 <!doctype html>
 <html>
 <head>
 <!--
-Class: N222
-Name: Matthew Allbright, Lindsey Bishop, Daniel Evan Snyder
-Project: You Tube API
-Date: 7/15/13
+Matthew Allbright: So one thing i'm trying to tackle is how to arrange the list of urls so that it stays as the url's
+that is imported from the API data.
+
+One idea is to create a series of divs and load the urls into the divs, then somehow figure out how to rearrange them.
+I think that aspect is going to be the biggest hurdle. The YouTube url import was pretty much done for us in that
+in-class youtube example.
+
+
+Team: Matthew Allbright
+	  Lindsey Bishop
+      Evan Daniels
+
 -->
 <meta charset="UTF-8">
 <title>YouTubeApp</title>
@@ -14,54 +23,55 @@ Date: 7/15/13
 <script src="//ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js"></script>
 <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
 <script type="text/javascript">
-var params = { allowScriptAccess: "always"};
-var atts = { id: "tubePlayer"};
-swfobject.embedSWF("http://www.youtube.com/apiplayer?enablejsapi=1", "tubePlayer", "425", "356", "8", null, null, params, atts);
+	var params = { allowScriptAccess: "always"};
+	var atts = { id: "tubePlayer"};
+	swfobject.embedSWF("http://www.youtube.com/apiplayer?enablejsapi=1", "tubePlayer", "425", "356", "8", null, null, params, atts);
+	
+	var player;
+	function onYouTubePlayerReady(id) {
+	console.log("runs");
+	player=$("#tubePlayer").get(0);
+	}//end onYouTubePlayerReady
 
-var player;
-function onYouTubePlayerReady(id) {
-console.log("runs");
-player=$("#tubePlayer").get(0);
-}
 
-
-var loadedData;//declaring a variable
-var url= "http://gdata.youtube.com/feeds/api/videos?max-results=20&alt=json&q=";//declaring a variable
-
-function listResults(url) {
+	var loadedData;
+	var url= "http://gdata.youtube.com/feeds/api/videos?max-results=20&alt=json&q=";
+	function listResults(url) {
+	
 	$.getJSON(url, function( data ) {
 		console.log("url: " + url);
-
-loadedData = data;//this puts the data into the content div
-$("#content").html("");
-	$.each( data.feed.entry, function( key, value ) {
-
-var nodeUrl = value.id.$t.replace("http://gdata.youtube.com/feeds/api/videos/", "")
-
-$("#content").append("<p data-url='" + nodeUrl + "' >" + (key + 1) + ". " + value.title.$t + "->" + "</p>");
-
-$("p").on("click", function() {
-	player.loadVideoById( $(this).data("url"), 0, "default");
+		loadedData = data;
+		$("#content").html("");
+		$.each( data.feed.entry, function( key, value ) {
+			var nodeUrl = value.id.$t.replace("http://gdata.youtube.com/feeds/api/videos/", "")
+			var point= "->";
+			$("#content").append("<p data-url='" + nodeUrl + "' >" + (key + 1) + ". " + value.title.$t+"</p>");
+				//$("").append($(":button").addClass("move"));
+				//$(":button").click(function(){
+					console.log("arrow")
+				//});
+		
+			$("p").on("click", function() {
+				player.loadVideoById( $(this).data("url"), 0, "default")
+				$("#youtube").append( $(this).data("url"));
+			});//end on
+		
+		});//end each
 	
-//console.log( $(this).data("url") );
-});
-
-});
-
-});
+	});//end get
 
 }
 
-$(document).ready(function(e) {
-	listResults(url);//defines list
-	
-$("#btnSearch").click(function() {//adding search box
-     console.log("clicked button!");
-	 listResults(url + $("#txtSearch").val());
+	$(document).ready(function(e) {
+		listResults(url);
+	$("#btnSearch").click(function() {
+         
+		console.log("clicked button!");
+		listResults(url + $("#txtSearch").val());
       
-     });//click function
+       });//end click
 
-});//ends ready
+        });//end ready
 
 
 
@@ -73,16 +83,16 @@ $("#btnSearch").click(function() {//adding search box
           padding: 10px;
         }
     #content{
-      width: 400px;
-      height: 1000px;
+      width: 300px;
+      height: 800px;
       background-color: #666;
       float: left;
     }
     #youtube{
-width: 400px;
-height: 1000px;
-background-color:#999;
-float: left;
+		width: 300px;
+		height: 800px;
+		background-color:#999;
+		float: left;
     }
 p { cursor: pointer}
     
@@ -90,9 +100,11 @@ p { cursor: pointer}
   </head>
     
   <body>
+  
    <div id="divA" class="col">
      <input id="txtSearch" />
         <input id="btnSearch" type="button" value="Search!" />
+        
     </div>
     <div id="content">
       <!--List -->
