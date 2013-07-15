@@ -15,9 +15,10 @@ in-class youtube example.
 <title>YouTubeApp</title>
 </head>
 <script src="googleapis.com/ajax/libs/swfobject/2.2/swtobject.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js"></script>
 <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
 <script type="text/javascript">
-  var params = { allowScriptAccess: "always"};
+	var params = { allowScriptAccess: "always"};
 	var atts = { id: "myytplayer"};
 	swfobject.embedSWF("http://www.youtube.com/apiplayer?enablejsapi=1", "tubePlayer", "425", "356", "8", null, null, params, atts);
 	
@@ -38,12 +39,13 @@ in-class youtube example.
       background-color: #666;
       float: left;
     }
-    .youtube{
+    #youtube{
 	  width: 300px;
 	  height: 800px;
 	  background-color:#999;
 	  float: left;
     }
+	p { cursor: pointer}
     
   </style>
   <script>
@@ -56,25 +58,29 @@ in-class youtube example.
 				var url= "http://gdata.youtube.com/feeds/api/videos";
 				$.getJSON(url+$("#txtSearch").val(), function (data) {
 				//your custom search results here
-				
-				
+				console.log("#txtSearch".val());
 				});
+				
+				//player
+	var url = "http://gdata.youtube.com/feeds/api/videos?max-results=20&json&q=cats";
+	
+	var  loadedData;
+	$.getJSON(url, function ( data ) {
+		loadedData = data;
+		$.each( data.feed.entry, function ( key, value) {
+			var nodeUrl= value.id.$t.replay("http://gdata.youtube.com/feeds/api/videos", "");
+			$("#youtube").append("<p data-rul='" + nodeUrl + "' >" + value.title.$t + "</p>");
+			$("p").on("click", function () {
+				player.loadVideobyId( $(this).data("url"), 0, "default");
+				console.log( $(this).data("url") );
 			});
-			
-			//ajax
-	<!--		$.getJSON("http://gdata.youtube.com/feeds/api/videos?max-results=20&alt=json&q=", function ( data ){
-				//console.log('data');
-				
-				//$("#content").append( data.feed.entry[0].title.$t );
-				//for( var i=0; i < data.feed.entry.length; i ++ ){
-				//	$("#content").append( "<p>" + data.feed.entry[i].title.$t + "</p>");
-				//}
-				//});
-				
-			//}); -->
+		});
 	});
-  
-  </script>
+				
+});
+});
+			
+	</script>
   
 <!-- <script>
   $(document).ready(function(e) {
@@ -113,7 +119,10 @@ secondDiv.append( "<li>" + associatedData + "</li>" );
     <div id="content">
       <!--List -->
     </div>
-    <div class="youtube">
+    <div id="youtube">
+    </div>
+    <div id="tubePlayer">
+    	You may or may not need Flash Player something or other and JavaScript enabled to blow up the enterprise.
     </div>
   </body>
 </html>
