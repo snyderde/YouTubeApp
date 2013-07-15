@@ -2,72 +2,30 @@
 <html>
 <head>
 <!--
-Class: N222
-Name: Daniel Evan Snyder
-Project: You Tube API
-Date: 7/15/13
+Lindsey Bishop
+Matthew Allbright
+Daniel Evan Snyder
+
+
 -->
 <meta charset="UTF-8">
 <title>YouTubeApp</title>
-
+</head>
 <script src="googleapis.com/ajax/libs/swfobject/2.2/swtobject.js"></script>
 <script src="//ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js"></script>
 <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
 <script type="text/javascript">
-var params = { allowScriptAccess: "always"};
-var atts = { id: "tubePlayer"};
-swfobject.embedSWF("http://www.youtube.com/apiplayer?enablejsapi=1", "tubePlayer", "425", "356", "8", null, null, params, atts);
-
-var player;
-function onYouTubePlayerReady(id) {
-console.log("runs");
-player=$("#tubePlayer").get(0);
-}
-
-
-var loadedData;//declaring a variable
-var url= "http://gdata.youtube.com/feeds/api/videos?max-results=20&alt=json&q=";//declaring a variable
-
-function listResults(url) {
-	$.getJSON(url, function( data ) {
-		console.log("url: " + url);
-
-loadedData = data;//this puts the data into the content div
-$("#content").html("");
-	$.each( data.feed.entry, function( key, value ) {
-
-var nodeUrl = value.id.$t.replace("http://gdata.youtube.com/feeds/api/videos/", "")
-
-$("#content").append("<p data-url='" + nodeUrl + "' >" + (key + 1) + ". " + value.title.$t + "->" + "</p>");
-
-$("p").on("click", function() {
-	player.loadVideoById( $(this).data("url"), 0, "default");
+	var params = { allowScriptAccess: "always"};
+	var atts = { id: "myytplayer"};
+	swfobject.embedSWF("http://www.youtube.com/apiplayer?enablejsapi=1", "tubePlayer", "425", "356", "8", null, null, params, atts);
 	
-//console.log( $(this).data("url") );
-});
-
-});
-
-});
-
-}
-
-$(document).ready(function(e) {
-	listResults(url);//defines list
-	
-$("#btnSearch").click(function() {//adding search box
-     console.log("clicked button!");
-	 listResults(url + $("#txtSearch").val());
-      
-     });//click function
-
-});//ends ready
-
-
-
-
+	var player;
+	function onYouTubePlayerReady(id) {
+		console.log("runs");
+		player=$("#myytplayer").get(0);
+	}
 </script>
-<style>
+  <style>
     body{
           margin: 0;
           padding: 10px;
@@ -79,28 +37,58 @@ $("#btnSearch").click(function() {//adding search box
       float: left;
     }
     #youtube{
-width: 300px;
-height: 800px;
-background-color:#999;
-float: left;
+	  width: 300px;
+	  height: 800px;
+	  background-color:#999;
+	  float: left;
     }
-p { cursor: pointer}
+	p { cursor: pointer}
     
   </style>
-  </head>
+  <script>
+  <!-- document is ready here, ready to load data onto --> 
+  	$(document).ready(function(e){
+		console.log('init');
+		var val="";
+		var loadedData;
+		//button
+		$("#btnSearch").click(function(){
+			console.log('button works');
+			var url= "http://gdata.youtube.com/feeds/api/videos?max-results=20&alt=json&q=";
+			$.getJSON( url + $("#txtSearch").val(), function (data) {
+				//your custom search results 
+				console.log(data);
+			});//get
+		});//end btnSearch
+		$.getJSON( url, function (data) {
+		loadeData= data;
+		$.each( data.feed.entry, function ( key, value) {
+			var nodeUrl = value.id.$t.replace("http://gdata.youtube.com/feeds/api/videos/", "")
+			//$("txtSearch")
+	
+		});//end of each
+		});//end get data
+		//processing data into url
+		
+});//end Ready
+			
+	</script>
     
   <body>
-   <div id="divA" class="col">
-     <input id="txtSearch" />
+  	<div id="divA" class="col">
+    	<input id="txtSearch" />
         <input id="btnSearch" type="button" value="Search!" />
     </div>
+    <!-- Search Results list goes here -->
     <div id="content">
-      <!--List -->
+   
     </div>
+    <!-- Playlist will go here -->
     <div id="youtube">
     </div>
+    <!-- video player goes here --> 
     <div id="tubePlayer">
-     You may or may not need Flash Player something or other and JavaScript enabled to blow up the enterprise.
+    	You may or may not need Flash Player something or other and JavaScript enabled to blow up the enterprise.
     </div>
   </body>
 </html>
