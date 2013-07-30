@@ -1,67 +1,53 @@
 package
 {
-  import flash.display.Sprite;
+	import flash.display.Sprite;
 	import flash.events.Event;
+	import flash.events.KeyboardEvent;
 	
-	public class ball extends Sprite
+	public class paddle extends Sprite
 	{
 		
-		public var velocity:Object;
-		public var acceleration:Object;
-		public var bounciness:Number;
+		private var velocity:Number;
+		private var b:ball;
 		
-		public function ball(targBounciness:Number)
+		public function paddle()
 		{
 			super();
-			//set our bounciness
-			bounciness = targBounciness;
 			
-			//make a circle around the middle of the
-			//sprite
-			this.graphics.beginFill(Math.random() * 0xFFFFFF);
-			this.graphics.drawCircle(0,0, 40);
+			velocity = 0;
 			
-			//setup velocity
-			velocity = {};
-			velocity.x = Math.random() * 5;
-			velocity.y = 20;
-			
-			//setup acceleration
-			acceleration = new Object();
-			acceleration.x = 0;
-			acceleration.y = 1;
-			
+			this.graphics.beginFill(0x000000);
+			this.graphics.drawRect(0,0,200, 30);
+			this.y= 350;
+			this.addEventListener(Event.ADDED_TO_STAGE, init);
 			this.addEventListener(Event.ENTER_FRAME, onEnterFrame);
+			this.addEventListener(Event.ENTER_FRAME, onE);
+		}//end Paddle
+		
+		private function onEnterFrame(e:Event):void{
+			this.x += velocity;
+			
+			//simulate friction
+			velocity *= .9;
+		}//end onEnterFrame
+		
+		private function init(e:Event):void {
+			stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
+		}//end init
+		
+		public function onKeyDown(e:KeyboardEvent):void {
+			trace(e.keyCode);
+			if(e.keyCode == 37) {
+				velocity = -5;	
+			}//end if left
+			if(e.keyCode == 39) {
+				velocity = 5;
+			}//end if right
+		}//end onKeyDown
+		
+		private function onE(e:Event):void {
+			
 		}
 		
-		public function onEnterFrame(e:Event):void {
-			
-			this.velocity.x += this.acceleration.x;
-			this.velocity.y += this.acceleration.y;
-			
-			this.x += this.velocity.x;
-			this.y += this.velocity.y;
-			
-			if(this.y < 0) {
-				this.y = 0;
-				this.velocity.y *= -1;
-			}
-			
-			if(this.x < 0) {
-				this.x = 0;
-				this.velocity.x *= -1;
-			}
-			
-			if(this.x > stage.stageWidth) {
-				this.x = stage.stageWidth;
-				this.velocity.x *= -1;
-			}
-			
-			if(this.y > stage.stageHeight) {
-				this.y = stage.stageHeight;
-				this.velocity.y *= -bounciness;
-				this.velocity.x *= bounciness;
-			}
-		}
 	}
 }
